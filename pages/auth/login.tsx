@@ -27,8 +27,14 @@ function LoginPage() {
       }
     }
   }
+
+  const handleSignUp = async (e: any) => {
+    Router.push('/auth/signup');
+  }
+  
   return (
     <div>
+      <button onClick={handleSignUp}>Sign Up</button>
       <h1>Login</h1>
         <p>{errorMessage}</p>
       <form method="post" action="/" id="loginForm">

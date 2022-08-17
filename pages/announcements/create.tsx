@@ -68,8 +68,13 @@ const CreateAnnouncement = () => {
     await createAnnouncement(formData);
   }
 
+  const handleBack = async (e: any) => {
+    Router.push('/')
+  }
+
   return (
     <div className={styles.cardBox}>
+      <button onClick={handleBack}>Back</button>
       <h1>Create Announcement</h1>
       {errorMessage && <p>{errorMessage}</p>}
       <div className={styles.cardBox}>

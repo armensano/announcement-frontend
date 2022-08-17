@@ -28,8 +28,13 @@ function SignUp () {
       }
     }
   }
+
+  const handleLogin = async (e: any) => {
+    Router.push('/auth/login');
+  }
   return (
     <div>
+      <button onClick={handleLogin}>Log In</button>
       <h1>Sign Up</h1>
       <form method="post" action="http://localhost:8080/auth/signup">
         <input type="text" placeholder="Name" name="name"/>
