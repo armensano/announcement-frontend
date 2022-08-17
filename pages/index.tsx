@@ -84,7 +84,7 @@ const Home: NextPage = () => {
               <p>region: {announcement.region}</p>
               </div>
               {announcement.images.map((image: string) => {
-                if (image === 'undefined') {
+                if (image === 'undefined' || image === undefined || image === '[]') {
                   return 'no image'
                 }
                 const src=`${URL}/uploads/${announcement.images[0]}`
