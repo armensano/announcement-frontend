@@ -88,7 +88,7 @@ const Home: NextPage = () => {
           {announcements.map((announcement: any) => (
             <a href={announcement.url} key={announcement.id} id={announcement.id} className={styles.card} onClick={handleClick}>
               <div className={'textDiv'}>
-              <p>{announcement.description}</p>
+              <p>description: {announcement.description}</p>
               <p>price: {announcement.price}</p>
               <p>tags: {announcement.tags.join(', ')}</p>
               <p>city: {announcement.city}</p>
