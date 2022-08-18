@@ -43,11 +43,20 @@ const Home: NextPage = () => {
     
   }
   const handleSignOut = async (e: any) => {
-    const response = await axios.post(`${URL}/auth/logout`, {}, {
-      headers: {
-        Authorization: 'Bearer ' + localStorage.getItem('Authorization')
+    try {
+      const response = await axios.post(`${URL}/auth/logout`, {}, {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('Authorization')
+        }
+      })
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const axiosError = error as AxiosError<any>;
+        if (axiosError.response) {
+          setErrorMessage(axiosError.response.data.value)
+        }
       }
-    })
+    }
     localStorage.removeItem('Authorization')
     Router.push('/auth/login')
   }

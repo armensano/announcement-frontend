@@ -1,6 +1,8 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import Router from 'next/router'
 import React from 'react';
+import styles from '../../styles/Home.module.css'
+
 const URL: string = process.env.SERVER_URL || 'http://localhost:8080';
 
 function LoginPage() {
@@ -37,7 +39,7 @@ function LoginPage() {
       <button onClick={handleSignUp}>Sign Up</button>
       <h1>Login</h1>
         <p>{errorMessage}</p>
-      <form method="post" action="/" id="loginForm">
+      <form method="post" action="/" id="loginForm" className={styles.flexBox}>
         <input type="text" placeholder="Email" name="email"/>
         <input type="password" placeholder="Password" name="password"/>
         <button type="submit" onClick={handleSubmit}>Login</button>
