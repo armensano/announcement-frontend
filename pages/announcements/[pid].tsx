@@ -104,9 +104,13 @@ const Announcement = () => {
     const name = e.target.name;
     setAnnouncement({...announcement, [name]: value})
   }
+  const handleBack = (e: any) => {
+    Router.push('/')
+  }
 
   return (
     <div className={styles.cardBox}>
+      <button onClick={handleBack}>Back</button>
       <h1>Update Announcement</h1>
       {errorMessage && <p>{errorMessage}</p>}
       {axiosErrorMessage && <p>{axiosErrorMessage}</p>}
@@ -118,7 +122,7 @@ const Announcement = () => {
         <input type="text" placeholder="Tags" value={announcement?.tags} name="tags" onChange={handleChange}/>
         <input type="text" placeholder="City" value={announcement?.city} name="city" onChange={handleChange}/>
         <input type="text" placeholder="Region" name="region" value={announcement?.region} onChange={handleChange}/>
-        <input id='images' type="file" placeholder="Images" name="images"/>
+        <input id='images' className={styles.image} type="file" placeholder="Images" name="images"/>
         {announcement?.images.map((image: string) => {
                 const src=`${URL}/uploads/${announcement?.images[0]}`
                 return (

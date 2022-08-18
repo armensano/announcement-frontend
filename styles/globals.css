@@ -15,6 +15,28 @@ a {
   box-sizing: border-box;
 }
 
+button {
+  border:1px solid #a5a5a5;
+  outline: none;
+  cursor: pointer;
+  height: 2.5em;
+  width: 7em;
+  border-radius: 10px;
+
+}
+
+input {
+  border:1px solid #a5a5a5;
+  outline: none;
+  cursor: pointer;
+  height: 2.5em;
+  width: 10em;
+  border-radius: 10px;
+  display: flex;
+  margin: auto;
+  margin-top: 4px;
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;

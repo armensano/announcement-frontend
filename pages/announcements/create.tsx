@@ -85,7 +85,7 @@ const CreateAnnouncement = () => {
         <input type="text" placeholder="Tags" name="tags"/>
         <input type="text" placeholder="City" name="city"/>
         <input type="text" placeholder="Region" name="region"/>
-        <input id='images' type="file" placeholder="Images" name="images"/>
+        <input id='images' className={styles.image} type="file" placeholder="Images" name="images"/>
         <button type="submit" onClick={handleClick}>Create</button>
       </form>
     </div>

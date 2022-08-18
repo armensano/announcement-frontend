@@ -114,6 +114,9 @@
   height: 1em;
   margin-left: 0.5rem;
 }
+.image {
+  border: none
+}
 
 @media (max-width: 600px) {
   .grid {
