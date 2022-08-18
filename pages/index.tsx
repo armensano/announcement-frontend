@@ -30,8 +30,10 @@ const Home: NextPage = () => {
     } catch (error) {
       if (error instanceof AxiosError) {
         const axiosError = error as AxiosError<any>;
-        if (axiosError.response) {
-          setErrorMessage(axiosError.response.data.value)
+        if (axiosError.response?.data) {
+          setErrorMessage(axiosError.response.data.message)
+        } else {
+          setErrorMessage(error.message)
         }
       }
     }
