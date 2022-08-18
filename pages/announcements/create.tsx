@@ -3,7 +3,7 @@ import Router from "next/router";
 import React, { useEffect } from "react";
 import styles from '../../styles/Home.module.css'
 
-const URL = process.env.SERVER_URL || 'http://localhost:8080';
+const URL = process.env.SERVER_URL || 'http://ec2-18-215-176-40.compute-1.amazonaws.com:3000';
 
 const CreateAnnouncement = () => {
   const [errorMessage, setErrorMessage] = React.useState('')
