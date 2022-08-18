@@ -107,6 +107,25 @@ const Announcement = () => {
   const handleBack = (e: any) => {
     Router.push('/')
   }
+  const handleDelete = async (e: any) => {
+    try {
+      const id = window.location.href.split('/').pop()
+      const url = `${URL}/announcements/${id}`
+      const response = await axios.delete(url, {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('Authorization')
+        }
+      })
+      Router.push('/')
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const axiosError = error as AxiosError<any>;
+        if (axiosError.response) {
+          setErrorMessage(axiosError.response?.data?.value)
+        }
+      }
+    }
+  }
 
   return (
     <div className={styles.cardBox}>
@@ -131,6 +150,7 @@ const Announcement = () => {
               })}
         <button type="submit" onClick={handleClick}>Update</button>
       </form>
+      <button onClick={handleDelete}>Delete</button>
     </div>
     </div>
     </div>
