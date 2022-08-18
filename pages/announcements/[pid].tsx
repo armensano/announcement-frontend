@@ -89,7 +89,7 @@ const Announcement = () => {
     const city = form.elements.city.value;
     
     const formData = new FormData();
-    const files = document.getElementById('images');
+    const files:any = document.getElementById('images');
     formData.append('description', description);
     formData.append('price', price);
     formData.append('tags', JSON.stringify(tags));
@@ -113,7 +113,7 @@ const Announcement = () => {
       <button onClick={handleBack}>Back</button>
       <h1>Update Announcement</h1>
       {errorMessage && <p>{errorMessage}</p>}
-      {axiosErrorMessage && <p>{axiosErrorMessage}</p>}
+      {axiosErrorMessage && <p>{axiosErrorMessage.message}</p>}
       <div className={styles.cardBox}>
     <div className={styles.card}>
       <form method="post" action={`${URL}/announcements`}>
@@ -126,7 +126,7 @@ const Announcement = () => {
         {announcement?.images.map((image: string) => {
                 const src=`${URL}/uploads/${announcement?.images[0]}`
                 return (
-                  <Image loader={() => src} src={src} alt={announcement?.title} key={src} width="100%" height="100%"	/>
+                  <Image loader={() => src} src={src} alt='no image' key={src} width="100%" height="100%"	/>
                 )
               })}
         <button type="submit" onClick={handleClick}>Update</button>
