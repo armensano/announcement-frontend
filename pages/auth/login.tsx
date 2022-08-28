@@ -3,7 +3,7 @@ import Router from 'next/router'
 import React from 'react';
 import styles from '../../styles/Home.module.css'
 
-const URL: string = process.env.SERVER_URL || 'http://ec2-18-215-176-40.compute-1.amazonaws.com:3000';
+const URL: string = process.env.SERVER_URL || '';
 
 function LoginPage() {
   const [errorMessage, setErrorMessage] = React.useState('');

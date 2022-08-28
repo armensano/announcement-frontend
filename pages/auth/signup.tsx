@@ -2,7 +2,7 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import Router from "next/router";
 import React from "react";
 import styles from '../../styles/Home.module.css'
-const URL = process.env.SERVER_URL || 'http://ec2-18-215-176-40.compute-1.amazonaws.com:3000';
+const URL = process.env.SERVER_URL || '';
 
 function SignUp () {
   const [errorMessage, setErrorMessage] = React.useState('');
@@ -37,7 +37,7 @@ function SignUp () {
     <div>
       <button onClick={handleLogin}>Log In</button>
       <h1>Sign Up</h1>
-      <form method="post" className={styles.flexBox} action="http://ec2-18-215-176-40.compute-1.amazonaws.com:3000/auth/signup">
+      <form method="post" className={styles.flexBox} action={URL+'/auth/signup'}>
         <input type="text" placeholder="Name" name="name"/>
         <input type="email" placeholder="Email" name="email"/>
         <input type="password" placeholder="Password" name="password"/>

@@ -13,4 +13,7 @@ module.exports = {
     // !! WARN !!
     ignoreBuildErrors: true,
   },
+  env: {
+    SERVER_URL: 'http://greatdomain.click'
+  }
 }
