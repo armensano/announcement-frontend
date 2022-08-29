@@ -7,12 +7,29 @@ const URL = process.env.SERVER_URL;
 
 const CreateAnnouncement = () => {
   const [errorMessage, setErrorMessage] = React.useState('')
+  const [categories, setCategories] = React.useState([])
+  const [category, setCategory] = React.useState(0)
 
   useEffect(() => {
     if(!localStorage.getItem('Authorization')) {
       Router.push('/auth/login')
     }
+    getCategories()
   } , [])
+
+  const getCategories = async () => {
+    try {
+      const response = await axios.get(`${URL}/category`, {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('Authorization')
+        }
+      })
+      setCategories(response.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   const createAnnouncement = async (formData: FormData) => {
     try {
       const url = `${URL}/announcements`
@@ -56,7 +73,6 @@ const CreateAnnouncement = () => {
     
     const region = form.elements.region.value;
     const city = form.elements.city.value;
-    const categoryId = form.elements.category.value;
     
     
     const formData = new FormData();
@@ -67,12 +83,16 @@ const CreateAnnouncement = () => {
     formData.append('images', files?.files[0]);
     formData.append('region', region);
     formData.append('city', city);
-    formData.append('categoryId', categoryId);
+    formData.append('categoryId', category + '');
     await createAnnouncement(formData);
   }
 
   const handleBack = async (e: any) => {
     Router.push('/')
+  }
+
+  const handleRadio = async (e: any) => {
+    setCategory(e.target.value)
   }
 
   return (
@@ -83,7 +103,14 @@ const CreateAnnouncement = () => {
       <div className={styles.cardBox}>
     <div className={styles.card}>
       <form method="post" action={`${URL}/announcements`}>
-        <input type="number" placeholder="category" name="category"/>
+        <div>
+          <p>category</p>
+          {
+            categories.map((cat: any) => (
+              <div key={cat.id}><input type="radio" checked={category == cat.id} style={{display: 'inline', width: 'fit-content'}} value={cat.id} onClick={handleRadio}/> {cat.name}</div>
+            ))
+          }
+        </div>
         <input type="text" placeholder="Description" name="description"/>
         <input type="number" placeholder="Price" name="price"/>
         <input type="text" placeholder="Tags" name="tags"/>
