@@ -142,20 +142,45 @@ const Home: NextPage = () => {
   const handleRadio = async (e: any, name: string) => {
     const { value,  } = e.currentTarget
     if (name === 'city') {
-      setSearch({
-        ...search,
-        city: value
-      })  
-    } else if (name === 'region') {
-      setSearch({
-        ...search,
-        region: value
-      })
+      if (value == search.city) {
+        e.currentTarget.checked = false
+        setSearch({
+          ...search,
+          city: ''
+        })
+      } else {
+        setSearch({
+          ...search,
+          city: value
+        })  
+      }
+    } else if (name == 'region') {
+      if (value === search.region) {
+        e.currentTarget.checked = false;
+        setSearch({
+          ...search,
+          region: ''
+        })
+      } else {
+        setSearch({
+          ...search,
+          region: value
+        })
+      }
     } else if (name === 'category') {
-      setSearch({
-        ...search,
-        categoryId: +value
-      })
+      
+      if (value == search.categoryId) {
+        e.currentTarget.checked = false;
+        setSearch({
+          ...search,
+          categoryId: 0
+        })
+      } else {
+        setSearch({
+          ...search,
+          categoryId: +value
+        })
+      }
     }
   }
 

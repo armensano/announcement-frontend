@@ -51,6 +51,7 @@ const CreateAnnouncement = () => {
       } 
     }
   }
+
   const handleClick = async (e: any) => {
     e.preventDefault();
     const form = e.target.form;
@@ -73,7 +74,6 @@ const CreateAnnouncement = () => {
     
     const region = form.elements.region.value;
     const city = form.elements.city.value;
-    
     
     const formData = new FormData();
     const files = document.getElementById('images');
