@@ -12,17 +12,21 @@ const URL:string = process.env.SERVER_URL || ''
 const Home: NextPage = () => {
   const [errorMessage, setErrorMessage] = React.useState('')
   const [announcements, setAnnouncements] = React.useState([])
+  const [onlyMine, setOnlyMine] = React.useState(false)
 
   useEffect(() => {
     if(!localStorage.getItem('Authorization')) {
       Router.push('/auth/login')
     }
-    getAnnouncements()
+    getAnnouncements(onlyMine)
   }, [])
+  const getAnnouncements = async (onlyMine: boolean) => {
 
-  const getAnnouncements = async () => {
     try {
       const response = await axios.get(`${URL}/announcements`, {
+        params: {
+          onlyMine
+        },
         headers: {
           Authorization: 'Bearer ' + localStorage.getItem('Authorization')
         }
@@ -71,6 +75,11 @@ const Home: NextPage = () => {
     Router.push('/announcements/create')
   }
 
+  const handleOnlyMine = async (e: any) => {
+    getAnnouncements(!onlyMine)
+    setOnlyMine(!onlyMine)
+  }
+
   return (
     <div className={styles.container}>
       <Head>
@@ -87,7 +96,7 @@ const Home: NextPage = () => {
         <h1 className={styles.title}>
         Announcements
         </h1>
-
+        <button onClick={handleOnlyMine}>{onlyMine ? 'Show all' : "Show only mine"}</button>
 
         <div className={styles.grid}>
           {announcements.map((announcement: any) => (
