@@ -39,10 +39,10 @@ const Home: NextPage = () => {
     if(!localStorage.getItem('Authorization')) {
       Router.push('/auth/login')
     }
-    getAnnouncements(onlyMine)
-  }, [])
+    getSearchedAnnouncements(search)
+  }, [search])
 
-  const getSearchedAnnouncements = async () => {
+  const getSearchedAnnouncements = async (search: ISearch) => {
     try {
       const response = await axios.post(`${URL}/announcements/search`, search, {
         headers: {
@@ -56,35 +56,6 @@ const Home: NextPage = () => {
     }
   }
 
-
-
-  const getAnnouncements = async (onlyMine: boolean) => {
-
-    try {
-      const response = await axios.get(`${URL}/announcements`, {
-        params: {
-          onlyMine
-        },
-        headers: {
-          Authorization: 'Bearer ' + localStorage.getItem('Authorization')
-        }
-      })
-      setAnnouncements(response.data)
-    } catch (error: any) {
-      if (error?.response?.status === 401) {
-        Router.push('/auth/login')
-      }
-      if (error instanceof AxiosError) {
-        const axiosError = error as AxiosError<any>;
-        if (axiosError.response?.data) {
-          setErrorMessage(axiosError.response.data.message)
-        } else {
-          setErrorMessage(error.message)
-        }
-      }
-    }
-  }
-
   const handleClick = async (e: any) => {
     const id: number = e.currentTarget.id
     Router.push(`/announcements/${id}`)
@@ -92,7 +63,7 @@ const Home: NextPage = () => {
   }
   const handleSignOut = async (e: any) => {
     try {
-      const response = await axios.post(`${URL}/auth/logout`, {}, {
+      await axios.post(`${URL}/auth/logout`, {}, {
         headers: {
           Authorization: 'Bearer ' + localStorage.getItem('Authorization')
         }
@@ -114,8 +85,11 @@ const Home: NextPage = () => {
   }
 
   const handleOnlyMine = async (e: any) => {
-    getAnnouncements(!onlyMine)
-    setOnlyMine(!onlyMine)
+    getSearchedAnnouncements(search)
+    setSearch({
+      ...search,
+      onlyMine: !search.onlyMine
+    })
   }
 
   const updateSearch = async (e: any) => {
@@ -124,11 +98,10 @@ const Home: NextPage = () => {
     if (name === 'price' || name === 'categoryId') {
       value = parseInt(value)
     }
-    setSearch({
+    await setSearch({
       ...search,
       [name]: value
     })
-    getSearchedAnnouncements()
   }
 
   return (
@@ -154,7 +127,6 @@ const Home: NextPage = () => {
           <input type="text" name="region" id="region" placeholder="Region" onChange={updateSearch}/>
           <input type="text" name="city" id="city" placeholder="City" onChange={updateSearch}/>
           <input type="number" name="price" id="price" placeholder="Price" onChange={updateSearch}/>
-          {/* <button onClick={handleOnlyMine}>Only mine</button> */}
        </form>
         <button onClick={handleOnlyMine}>{onlyMine ? 'Show all' : "Show only mine"}</button>
 
@@ -167,6 +139,7 @@ const Home: NextPage = () => {
               <p>tags: {announcement.tags.join(', ')}</p>
               <p>city: {announcement.city}</p>
               <p>region: {announcement.region}</p>
+              <p>created by : {announcement.user}</p>
               </div>
               {announcement.images.map((image: string) => {
                 if (image === 'undefined' || image === undefined || image === '[]') {
