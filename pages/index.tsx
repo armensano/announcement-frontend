@@ -21,6 +21,9 @@ interface ISearch {
 }
 const Home: NextPage = () => {
   const [errorMessage, setErrorMessage] = React.useState('')
+  const [cities, setCities] = React.useState([])
+  const [categories, setCategories] = React.useState([])
+  const [regions, setRegions] = React.useState([])
   const [announcements, setAnnouncements] = React.useState([])
   const [onlyMine, setOnlyMine] = React.useState(false)
   const [search, setSearch] = React.useState<ISearch>({
@@ -35,12 +38,56 @@ const Home: NextPage = () => {
     page: 1
   })
 
-  useEffect(() => {
+  useEffect( () => {
     if(!localStorage.getItem('Authorization')) {
       Router.push('/auth/login')
     }
+    getCites()
+    getRegions()
+    getCategories()
     getSearchedAnnouncements(search)
   }, [search])
+
+  const getCites = async () => {
+    try {
+      const response = await axios.get(`${URL}/announcements/cities`, {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('Authorization')
+        }
+      })
+      
+      setCities(response.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  const getCategories = async () => {
+    try {
+      const response = await axios.get(`${URL}/category`, {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('Authorization')
+        }
+      })
+      setCategories(response.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
+  const getRegions = async () => {
+    try {
+      const response = await axios.get(`${URL}/announcements/regions`, {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('Authorization')
+        }
+      })
+      setRegions(response.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
 
   const getSearchedAnnouncements = async (search: ISearch) => {
     try {
@@ -92,6 +139,26 @@ const Home: NextPage = () => {
     })
   }
 
+  const handleRadio = async (e: any, name: string) => {
+    const { value,  } = e.currentTarget
+    if (name === 'city') {
+      setSearch({
+        ...search,
+        city: value
+      })  
+    } else if (name === 'region') {
+      setSearch({
+        ...search,
+        region: value
+      })
+    } else if (name === 'category') {
+      setSearch({
+        ...search,
+        categoryId: +value
+      })
+    }
+  }
+
   const updateSearch = async (e: any) => {
     const {name} = e.target
     let {value} = e.target
@@ -121,11 +188,32 @@ const Home: NextPage = () => {
         Announcements
         </h1>
        <form action="" className={styles.searchBox}>
-          <input type="number" name="categoryId" id="categoryId" placeholder="categoryId" onChange={updateSearch}/>
+          <div>
+            <p>category</p>
+            {
+              categories.map((category: any) => (
+                <div key={category.id}><input type="radio" checked={search.categoryId === category.id} style={{display: 'inline', width: 'fit-content'}} value={category.id} onClick={(e) => handleRadio(e, 'category')}/> {category.name}</div>
+              ))
+            }
+          </div>
           <input type="text" name="description" id="description" placeholder="Description" onChange={updateSearch}/>
+          <div>
+            <p>city</p>
+            {
+              cities.map((city: any) => (
+                <div key={city}><input type="radio" checked={search.city === city} style={{display: 'inline', width: 'fit-content'}} value={city} onClick={(e) => handleRadio(e, 'city')}/> {city}</div>
+              ))
+            }
+          </div>
+          <div>
+            <p>region</p>
+            {
+              regions.map((region: any) => (
+                <div key={region}><input type="radio" checked={search.region === region} style={{display: 'inline', width: 'fit-content'}} value={region} onClick={(e) => handleRadio(e, 'region')} /> {region}</div>
+              ))
+            }
+          </div>
           <input type="text" name="tags" id="tags" placeholder="Tags" onChange={updateSearch}/>
-          <input type="text" name="region" id="region" placeholder="Region" onChange={updateSearch}/>
-          <input type="text" name="city" id="city" placeholder="City" onChange={updateSearch}/>
           <input type="number" name="price" id="price" placeholder="Price" onChange={updateSearch}/>
        </form>
         <button onClick={handleOnlyMine}>{onlyMine ? 'Show all' : "Show only mine"}</button>
