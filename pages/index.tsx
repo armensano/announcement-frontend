@@ -8,11 +8,32 @@ import { useEffect } from 'react'
 import styles from '../styles/Home.module.css'
 
 const URL:string = process.env.SERVER_URL || ''
-
+interface ISearch {
+  categoryId: number
+  description: string
+  tags: string
+  region: string
+  price: number
+  city: string
+  onlyMine: boolean
+  limit: number
+  page: number
+}
 const Home: NextPage = () => {
   const [errorMessage, setErrorMessage] = React.useState('')
   const [announcements, setAnnouncements] = React.useState([])
   const [onlyMine, setOnlyMine] = React.useState(false)
+  const [search, setSearch] = React.useState<ISearch>({
+    categoryId: 0,
+    description: '',
+    tags: '',
+    region: '',
+    price: 0,
+    city: '',
+    onlyMine: false,
+    limit: 10,
+    page: 1
+  })
 
   useEffect(() => {
     if(!localStorage.getItem('Authorization')) {
@@ -20,6 +41,23 @@ const Home: NextPage = () => {
     }
     getAnnouncements(onlyMine)
   }, [])
+
+  const getSearchedAnnouncements = async () => {
+    try {
+      const response = await axios.post(`${URL}/announcements/search`, search, {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('Authorization')
+        },
+      })
+      setAnnouncements(response.data)
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
+
+
+
   const getAnnouncements = async (onlyMine: boolean) => {
 
     try {
@@ -80,6 +118,19 @@ const Home: NextPage = () => {
     setOnlyMine(!onlyMine)
   }
 
+  const updateSearch = async (e: any) => {
+    const {name} = e.target
+    let {value} = e.target
+    if (name === 'price' || name === 'categoryId') {
+      value = parseInt(value)
+    }
+    setSearch({
+      ...search,
+      [name]: value
+    })
+    getSearchedAnnouncements()
+  }
+
   return (
     <div className={styles.container}>
       <Head>
@@ -96,6 +147,15 @@ const Home: NextPage = () => {
         <h1 className={styles.title}>
         Announcements
         </h1>
+       <form action="" className={styles.searchBox}>
+          <input type="number" name="categoryId" id="categoryId" placeholder="categoryId" onChange={updateSearch}/>
+          <input type="text" name="description" id="description" placeholder="Description" onChange={updateSearch}/>
+          <input type="text" name="tags" id="tags" placeholder="Tags" onChange={updateSearch}/>
+          <input type="text" name="region" id="region" placeholder="Region" onChange={updateSearch}/>
+          <input type="text" name="city" id="city" placeholder="City" onChange={updateSearch}/>
+          <input type="number" name="price" id="price" placeholder="Price" onChange={updateSearch}/>
+          {/* <button onClick={handleOnlyMine}>Only mine</button> */}
+       </form>
         <button onClick={handleOnlyMine}>{onlyMine ? 'Show all' : "Show only mine"}</button>
 
         <div className={styles.grid}>

@@ -56,6 +56,8 @@ const CreateAnnouncement = () => {
     
     const region = form.elements.region.value;
     const city = form.elements.city.value;
+    const categoryId = form.elements.category.value;
+    
     
     const formData = new FormData();
     const files = document.getElementById('images');
@@ -65,6 +67,7 @@ const CreateAnnouncement = () => {
     formData.append('images', files?.files[0]);
     formData.append('region', region);
     formData.append('city', city);
+    formData.append('categoryId', categoryId);
     await createAnnouncement(formData);
   }
 
@@ -80,8 +83,9 @@ const CreateAnnouncement = () => {
       <div className={styles.cardBox}>
     <div className={styles.card}>
       <form method="post" action={`${URL}/announcements`}>
+        <input type="number" placeholder="category" name="category"/>
         <input type="text" placeholder="Description" name="description"/>
-        <input type="text" placeholder="Price" name="price"/>
+        <input type="number" placeholder="Price" name="price"/>
         <input type="text" placeholder="Tags" name="tags"/>
         <input type="text" placeholder="City" name="city"/>
         <input type="text" placeholder="Region" name="region"/>
