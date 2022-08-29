@@ -105,7 +105,10 @@ const Home: NextPage = () => {
 
   const handleClick = async (e: any) => {
     const id: number = e.currentTarget.id
-    Router.push(`/announcements/${id}`)
+    const announcement: any = announcements.find((a:any) => a.id == id)
+    if (announcement?.owner === true) {
+      Router.push(`/announcements/${id}`)
+    }
     
   }
   const handleSignOut = async (e: any) => {

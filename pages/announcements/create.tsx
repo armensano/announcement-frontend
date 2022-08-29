@@ -73,7 +73,16 @@ const CreateAnnouncement = () => {
     }
     
     const region = form.elements.region.value;
+    if (region.length < 1) {
+      setErrorMessage('Please enter a region');
+      return;
+    }
     const city = form.elements.city.value;
+    
+    if (city.length < 1) {
+      setErrorMessage('Please enter a city');
+      return;
+    }
     
     const formData = new FormData();
     const files = document.getElementById('images');
