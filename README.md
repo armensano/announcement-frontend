@@ -1,6 +1,6 @@
 
 ## Announcement
-
+The site also is available at [https://announcement.vercel.app/](https://announcement.vercel.app/)
 First, run the development server:
 
 ```bash
